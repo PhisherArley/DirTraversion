@@ -52,18 +52,18 @@ DirInformation InitDirBlock() {
 }
 
 int main(int argc, TCHAR **argv) {
-	TCHAR dirLocation[BUFSIZE];
+    TCHAR dirLocation[BUFSIZE];
     TCHAR newDirLocation[BUFSIZE];
-	DWORD dwRet;
-	int numOfFiles = 0;
-	unsigned int cp;
+    DWORD dwRet;
+    int numOfFiles = 0;
+    unsigned int cp;
 
     InitFileBlock();
     InitDirBlock();
     cp = GetConsoleOutputCP();
     SetConsoleOutputCP(cp);
 
-	if (argc < 2) {
+    if (argc < 2) {
         dwRet = GetCurrentDirectory(BUFSIZE, dirLocation);
 
         if (dwRet == 0) {
@@ -79,8 +79,8 @@ int main(int argc, TCHAR **argv) {
         numOfFiles = DirListing(dirLocation);
         PrintFileInfo(dirLocation, numOfFiles);
         // printf("CP -> %ld\n", cp);
-		return;
-	}
+        return;
+    }
 
     if (PathFileExistsA(argv[1])) {
         StringCchCopy(dirLocation, MAX_PATH, argv[1]);
@@ -97,8 +97,8 @@ int main(int argc, TCHAR **argv) {
     }
 
     if (lstrcmpA(argv[1], "/?") == 0) {
-    	ShowOptions();
+        ShowOptions();
     }
 
-	return 0;
+    return 0;
 }
