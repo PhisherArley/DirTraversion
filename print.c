@@ -178,6 +178,9 @@ void PauseFileOutput(LPTSTR currPath, int files, int langID) {
             if (langID == 1033)
                 PrintFileInfo_enUS(currPath, i);
 
+            if (langID == 1046)
+                PrintFileInfo_ptBR(currPath, files);
+
             if(getchar() != 27) {
                 printf("Press enter to continue...\n");
             }
@@ -187,8 +190,7 @@ void PauseFileOutput(LPTSTR currPath, int files, int langID) {
     if (langID == 1033)
         PrintFileInfo_enUS(currPath, files);
 
-    /*
-        if (langID == 1046)
+    if (langID == 1046)
             PrintFileInfo_ptBR(currPath, files);
-    */
+    
 }
