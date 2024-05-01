@@ -57,6 +57,17 @@ void RemoveDot(TCHAR *thousandsArr) {
         token = strtok(NULL, ".");
 }
 
+void RemoveComma(TCHAR *thousandsArr) {
+    TCHAR *token;
+
+    if (thousandsArr == NULL)
+        return;
+
+    token = strtok(thousandsArr, ",");
+    while (token != NULL)
+        token = strtok(NULL, ",");
+}
+
 void DescendingOrderSort(int files) {
     qsort(block, files, sizeof(FileInformation), CompareSmaller);
 }

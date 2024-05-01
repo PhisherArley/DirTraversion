@@ -53,21 +53,38 @@ void DirAttributes(LPTSTR currentDir, LPTSTR option) {
     FindClose(hSearch);
 }
 
-int DirSortOrder(LPTSTR currentDir, LPTSTR option, int files) {
+int DirSortOrder(LPTSTR currentDir, LPTSTR option, int files, int dirLangID) {
     if ((lstrcmpA(option, "/O:D")) == 0) {
         SortDirAndFile(files);
-        PrintDirFirst(currentDir, files);
+
+        if (dirLangID == 1033)
+            PrintDirFirst_enUS(currentDir, files);
+
+        if (dirLangID == 1046)
+            PrintDirFirst_ptBR(currentDir, files);
+
         return 0;
     }
 
     if ((lstrcmpA(option, "/O:S")) == 0) {
         DescendingOrderSort(files);
-        PrintDirFirst(currentDir, files);
+
+        if (dirLangID == 1033)
+            PrintDirFirst_enUS(currentDir, files);
+
+        if (dirLangID == 1046)
+            PrintDirFirst_ptBR(currentDir, files);
+
         return 0;
     }
 
     if ((lstrcmpA(option, "/O:G")) == 0) {
-        PrintDirFirst(currentDir, files);
+        if (dirLangID == 1033)
+            PrintDirFirst_enUS(currentDir, files);
+
+        if (dirLangID == 1046)
+            PrintDirFirst_ptBR(currentDir, files);
+
         return 0;
     }
 
@@ -77,52 +94,73 @@ int DirSortOrder(LPTSTR currentDir, LPTSTR option, int files) {
     }
 
     if ((lstrcmpA(option, "/O:N")) == 0) {
-        PrintSortedFile(currentDir, files);
+        if (dirLangID == 1033)
+            PrintSortedFile_enUS(currentDir, files);
+
+        if (dirLangID == 1046)
+            PrintSortedFile_ptBR(currentDir, files);
+
         return 0;
     }
 
     return 1;
 }
 
-int DirTimeField(LPTSTR currentDir, LPTSTR option, int files) {
+int DirTimeField(LPTSTR currentDir, LPTSTR option, int files, int dirLangID) {
     int i;
     if (lstrcmpA(option, "/T:C") == 0) {
         if(GetTimeField(currentDir, option) < 1) {
             _tprintf(TEXT("Error in DirTimeField: "
-                "Could not execute GetTimeField properly\n"));
+                "Could not retrieve creation time.\n"));
             return 1;
         }
 
-        PrintFileInfo(currentDir, files);
+        if (dirLangID == 1033)
+            PrintFileInfo_enUS(currentDir, files);
+
+        if (dirLangID == 1046)
+            PrintFileInfo_ptBR(currentDir, files);
+
         return 0;
     }
 
     if (lstrcmpA(option, "/T:A") == 0) {
         if(GetTimeField(currentDir, option) < 1) {
             _tprintf(TEXT("Error in DirTimeField: "
-                "Could not execute GetTimeField properly\n"));
+                "Could not retrieve access time.\n"));
             return 1;
         }
 
-        PrintFileInfo(currentDir, files);
+        if (dirLangID == 1033)
+            PrintFileInfo_enUS(currentDir, files);
+
+        if (dirLangID == 1046)
+            PrintFileInfo_ptBR(currentDir, files);
+        
+
         return 0;
     }
 
     if (lstrcmpA(option, "/T:W") == 0) {
         if(GetTimeField(currentDir, option) < 1) {
             _tprintf(TEXT("Error in DirTimeField: "
-                "Could not execute GetTimeField properly\n"));
+                "Could not retrieve write time.\n"));
             return 1;
         }
 
-        PrintFileInfo(currentDir, files);
+        if (dirLangID == 1033)
+            PrintFileInfo_enUS(currentDir, files);
+
+        if (dirLangID == 1046)
+            PrintFileInfo_ptBR(currentDir, files);
+
         return 0;
     }
 
     return 1;
 }
 
-void DirNormalOptions(LPTSTR currentDir, LPTSTR option, int files) {
+void DirNormalOptions(LPTSTR currentDir, LPTSTR option, int files, int optLangID) {
     if (lstrcmpA(option, "/B") == 0) {
         PrintBareFile(currentDir, files);
     }
@@ -136,7 +174,11 @@ void DirNormalOptions(LPTSTR currentDir, LPTSTR option, int files) {
                 GetLastError());
         }
 
-        PrintThousandFormat(currentDir, files, option);
+        if (optLangID == 1033)
+            PrintThousandFormat_enUS(currentDir, files, option);
+
+        if (optLangID == 1046)
+            PrintThousandFormat_ptBR(currentDir, files, option);        
     }
 
     if (lstrcmpA(option, "/D") == 0) {
@@ -144,16 +186,21 @@ void DirNormalOptions(LPTSTR currentDir, LPTSTR option, int files) {
     }
 
     if (lstrcmpA(option, "/P") == 0) {
-        PauseFileOutput(currentDir, files);
+        PauseFileOutput(currentDir, files, optLangID);
     }
 
     if (lstrcmpA(option, "/Q") == 0) {
         GetFileOwner(currentDir);
-        PrintFileOwner(currentDir, files);
+
+        if (optLangID == 1033)
+            PrintFileOwner_enUS(currentDir, files);
+
+        if (optLangID == 1046)
+            PrintFileOwner_ptBR(currentDir, files);
     }
 
     if (lstrcmpA(option, "/S") == 0) {
-        FindDirectories(currentDir);
+        GetDirectories(currentDir);
     }
 
     if (lstrcmpA(option, "/W") == 0) {
@@ -161,12 +208,16 @@ void DirNormalOptions(LPTSTR currentDir, LPTSTR option, int files) {
     }
 
     if (lstrcmpA(option, "/X") == 0) {
-        PrintShortName(currentDir, files);
+        if (optLangID == 1033)
+            PrintShortName_enUS(currentDir, files);
+
+        if (optLangID == 1046)
+            PrintShortName_ptBR(currentDir, files);
     }
 
 }
 
-int ProcessOptions(LPTSTR targetDir, LPTSTR option, int files) {
+int ProcessOptions(LPTSTR targetDir, LPTSTR option, int files, int procLangID) {
     int processed;
     int i;
     LPTSTR attributeOptions[7] = {"/A:D", "/A:H", "/A:S", "/A:L", "/A:R", "/A:A", "/A:I"};
@@ -185,21 +236,21 @@ int ProcessOptions(LPTSTR targetDir, LPTSTR option, int files) {
     
     for (i = 0; i <= 4; i++) {
         if (lstrcmpA(option, sortOrder[i]) == 0) {
-            if (DirSortOrder(targetDir, option, files))
+            if (DirSortOrder(targetDir, option, files, procLangID))
                 printf("Error in DirSortOrder\n");
         }
     }
     
     for (i = 0; i <= 2; i++) {
         if (lstrcmpA(option, timeField[i]) == 0) {
-            if (DirTimeField(targetDir, option, files))
+            if (DirTimeField(targetDir, option, files, procLangID))
                 printf("Error in DirTimeField\n");
         }
     }
     
     for (i = 0; i <= 8; i++) {
         if (lstrcmpA(option, normalOptions[i]) == 0) {
-            DirNormalOptions(targetDir, option, files);
+            DirNormalOptions(targetDir, option, files, procLangID);
         }
     }
     
